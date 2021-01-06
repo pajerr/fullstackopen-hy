@@ -1,0 +1,9 @@
+title Harjoitus 0.6 Single Page App
+
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+palvelin -> selain: HTML 201 created
+
+note over palvelin:
+palvelin lisää selaimelta saadun JSON muodossa olevan muistiinpanon olemassa olevaan JSON dataan
+end note

@@ -1,0 +1,22 @@
+title Harjoitus 0.5 Single Page App
+
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+palvelin -> selain: HTML-koodi
+selain -> palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin -> selain: CSS-tiedosto
+
+selain -> palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+palvelin -> selain: spa.js
+
+note over selain:
+Selain suorittaa JavaScriptiä ja pyytää data.json tiedoston palvelimelta
+end note
+
+selain -> palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin -> selain: Data.json
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note

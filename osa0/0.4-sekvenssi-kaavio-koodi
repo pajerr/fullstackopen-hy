@@ -1,0 +1,34 @@
+title Harjoitus 0.4 uusi muistiinpano
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over selain:
+selain lähettää lomakkeelle syötetyn datan palvelimelle
+end note
+
+palvelin->selain: HTTP 302 redirect pyyntö
+
+note over palvelin:
+palvelin pyytää selainta tekemään HTTP GET pyynnön headerin osoittamaan osoitteeseen eli osoitteeseen: notes
+end note
+
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin -> selain: HTML-koodi
+selain -> palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin -> selain: CSS-tiedosto
+
+selain -> palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin -> selain: main.js
+
+note over selain:
+Selain suorittaa JavaScriptiä ja pyytää data.json tiedoston palvelimelta
+end note
+
+selain -> palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin -> selain: Data.json
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note
