@@ -1,1 +1,0 @@
-Osa1 harjoitus 1.1
