@@ -2,11 +2,24 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 
-const Button = ({handleClick, text}) => (
-  <button onClick={handleClick}>
+const Button = ({onClick, text}) => (
+  <button onClick={onClick}>
     {text}
   </button>
 )
+
+const Statistics = ({good, neutral, bad}) => {
+  return (
+    <div>
+      Good: {good}<br />
+      Neutral: {neutral}<br />
+      Bad: {bad}<br />
+      All: {good + neutral + bad}<br />
+      Average: {(good - bad)/(good + bad + neutral)}<br />
+      Positive: {good/(good + bad + neutral)*100} %
+    </div>
+  )
+}
 
 const App = () => {
   // tallenna napit omaan tilaansa
@@ -30,13 +43,11 @@ const App = () => {
     <div>
       <div>
         <h1>Give feedback</h1>
-      <Button handleClick={handleGoodClick} text='Good' />
-      <Button handleClick={handleNeutralClick} text='Neutral' />
-      <Button handleClick={handleBadClick} text='Bad' />
+      <Button onClick={handleGoodClick} text='Good' />
+      <Button onClick={handleNeutralClick} text='Neutral' />
+      <Button onClick={handleBadClick} text='Bad' />
       <h1>Statistics</h1>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
       </div>
     </div>
   )
