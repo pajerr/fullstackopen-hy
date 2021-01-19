@@ -27,6 +27,11 @@ const Course = ({ course }) => {
         <Content key={x.id} course={x} />
       )}
       </ul>
+      <ul>
+      {course.parts.reduce(function(total, x) {
+      return total + x.exercises
+      }, 0)}
+      </ul>
     </div>
   )
 }
