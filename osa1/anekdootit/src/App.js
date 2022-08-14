@@ -57,7 +57,6 @@ const App = () => {
     setPoints(newPoints);
   };
 
-  //<updateSelected randomInt={getRandomInt(0, 6)} />
   return (
     <div>
       <h1>Anecdote of the day</h1>
