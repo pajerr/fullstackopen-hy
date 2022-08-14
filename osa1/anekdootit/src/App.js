@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-//otetaan anecdootti array vastaan ja palautetaan random anekdootti listalta
 const DisplayAnecdote = ({ anecdotes, selected }) => {
   return <div>{anecdotes[selected]}</div>;
 };
@@ -14,14 +13,12 @@ const getRandomInt = function (min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
-const VoteStats = ({ selected, points, totalVotes }) => {
-  console.log("points[selected] arvo:", points[selected]);
-  //kutsutaan funktiota joka tarkistaa onko points tyhja
-  //const pointsEmpty = noVotes(points);
-  if (points[selected] === 0) {
+
+const VoteStats = ({ votes }) => {
+  if (votes === 0) {
     return <div>No votes yet</div>;
   } else {
-    return <div>Has {points[selected]} votes</div>;
+    return <div>Has {votes} votes</div>;
   }
 };
 
@@ -36,41 +33,26 @@ const App = () => {
     "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.",
   ];
   const [selected, setSelected] = useState(0);
-  const [allVotes, setAll] = useState(0);
-  //let points = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-  //let points = new Array(6).fill(0);
   const [points, setPoints] = useState(new Array(6).fill(0));
 
-  /*
-  const handleClick = ({ anecdotes, selected }) => {
-    const newSelected = selected;
-    setSelected(newSelected);
-    <DisplayAnecdote anecdotes={anecdotes} selected={newSelected} />;
-  };
-*/
-  const handleVoteClick = ({ selected, points }) => {
-    console.log("points array in voteClick:", points[selected]);
-    let newPoints = points;
-    points[selected] += 1;
+  const handleVoteClick = () => {
+    const newPoints = [...points];
+    newPoints[selected] += 1;
     setPoints(newPoints);
-    console.log("VOTED...");
-    console.log(
-      "points in vote array in voteClickComponent:",
-      points[selected]
-    );
   };
 
   //<updateSelected randomInt={getRandomInt(0, 6)} />
   return (
     <div>
       <DisplayAnecdote anecdotes={anecdotes} selected={selected} />
-      <VoteStats points={points} anecdote={selected} />
+      <VoteStats votes={points[selected]} />
       <Button
         handleClick={() => {
           setSelected(getRandomInt(0, 6));
         }}
         text="Next anecdote"
       />
+      <Button handleClick={handleVoteClick} text="Vote" />
     </div>
   );
 };
