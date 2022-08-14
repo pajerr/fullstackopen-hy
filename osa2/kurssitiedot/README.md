@@ -1,3 +1,1 @@
-Osa1<br />
-Tehtävät 1.1-1.2<br/>
-https://fullstackopen.com/osa1/reactin_alkeet<br/>
+https://fullstackopen.com/osa2/kokoelmien_renderointi_ja_moduulit#tehtavat-2-1-2-5
