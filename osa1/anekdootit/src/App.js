@@ -22,6 +22,22 @@ const VoteStats = ({ votes }) => {
   }
 };
 
+const MostVotes = ({ anecdotes, points }) => {
+  let mostVotesIndex = 0;
+  let mostVotesAmount = 0;
+  for (let i = 0; i < points.length; i++) {
+    if (points[i] >= mostVotesAmount) {
+      mostVotesAmount = points[i];
+      mostVotesIndex = i;
+    }
+  }
+  if (mostVotesAmount !== 0) {
+    return <DisplayAnecdote anecdotes={anecdotes} selected={mostVotesIndex} />;
+  } else {
+    return <p>No votes yet</p>;
+  }
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -44,6 +60,7 @@ const App = () => {
   //<updateSelected randomInt={getRandomInt(0, 6)} />
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <DisplayAnecdote anecdotes={anecdotes} selected={selected} />
       <VoteStats votes={points[selected]} />
       <Button
@@ -53,6 +70,8 @@ const App = () => {
         text="Next anecdote"
       />
       <Button handleClick={handleVoteClick} text="Vote" />
+      <h1>Anecdote with the most votes</h1>
+      <MostVotes anecdotes={anecdotes} points={points} />
     </div>
   );
 };
