@@ -23,19 +23,18 @@ const VoteStats = ({ votes }) => {
 };
 
 const MostVotes = ({ anecdotes, points }) => {
-  let mostVotesIndex = 0;
-  let mostVotesAmount = 0;
+  //kaytin kahta muuttujaa mutta parempi tapa kayttaa vaan yhta loopissa kun toinen turha
+  //let mostVotesIndex = 0;
+  //let mostVotesAmount = 0;
+  let mostVoted = 0;
   for (let i = 0; i < points.length; i++) {
-    if (points[i] >= mostVotesAmount) {
-      mostVotesAmount = points[i];
-      mostVotesIndex = i;
+    if (points[i] >= points[mostVoted]) {
+      //mostVotesAmount = points[i];
+      //mostVotesIndex = i;
+      mostVoted = i;
     }
   }
-  if (mostVotesAmount !== 0) {
-    return <DisplayAnecdote anecdotes={anecdotes} selected={mostVotesIndex} />;
-  } else {
-    return <p>No votes yet</p>;
-  }
+  return <DisplayAnecdote anecdotes={anecdotes} selected={mostVoted} />;
 };
 
 const App = () => {
