@@ -8,7 +8,7 @@ function alreadyInPersons(persons, first, last) {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 1 }]);
   const [newName, setNewName] = useState("");
 
   const addName = (event) => {
@@ -41,13 +41,13 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addName}>
         <div>
+          name:
           <input value={newName} onChange={handleNameChange} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
-      {/* <div>new name debug: {newName}</div> */}
       <h2>Numbers</h2>
       <ul>
         {persons.map((person) => (
