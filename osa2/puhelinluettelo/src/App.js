@@ -1,5 +1,12 @@
 import { useState } from "react";
 
+function alreadyInPersons(persons, first, last) {
+  //return first element of array that matches first and last, otherwise return false
+  return persons.find(
+    (person) => person.name.includes(first) && person.name.includes(last)
+  );
+}
+
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
@@ -10,10 +17,15 @@ const App = () => {
       name: newName,
       id: persons.length + 1,
     };
-    console.log("button clicked", event.target);
 
-    setPersons(persons.concat(nameObject));
-    setNewName("");
+    let [first, last] = nameObject.name.split(" ");
+
+    if (alreadyInPersons(persons, first, last)) {
+      alert(`${first} ${last} is already added to phonebook`);
+    } else {
+      setPersons(persons.concat(nameObject));
+      setNewName("");
+    }
   };
 
   //tapahumankäsittelijämetodi saa parametrina tapahtumaolion event
