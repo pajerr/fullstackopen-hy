@@ -7,18 +7,35 @@ function alreadyInPersons(persons, first, last) {
   );
 }
 
-const DisplayPersons = ({ persons }) => {
-  return (
-    <div>
-      <ul>
-        {persons.map((person) => (
-          <li key={person.id}>
-            {person.name} {person.number}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+const DisplayPersons = ({ persons, filter }) => {
+  if (filter.length === 0) {
+    return (
+      <div>
+        <ul>
+          {persons.map((person) => (
+            <li key={person.id}>
+              {person.name} {person.number}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  } else {
+    const filteredPersons = persons.filter((person) =>
+      person.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    return (
+      <div>
+        <ul>
+          {filteredPersons.map((person) => (
+            <li key={person.id}>
+              {person.name} {person.number}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 };
 
 const App = () => {
@@ -30,8 +47,7 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  const [filter, setFilter] = useState("");
-  const [showAll, setShowAll] = useState(true);
+  const [newFilter, setFilter] = useState("");
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -70,9 +86,9 @@ const App = () => {
     setFilter(event.target.value);
   };
 
-  const personstoShow = showAll
+  /*const personstoShow = showAll
     ? persons
-    : persons.filter((person) => person.includes(filter));
+    : persons.filter((person) => person.includes(filter));*/
 
   return (
     <div>
@@ -93,11 +109,11 @@ const App = () => {
       </form>
       <h2>Filter</h2>
       <div>
-        <input value={filter} onChange={handleFilterChange} />
+        <input value={newFilter} onChange={handleFilterChange} />
       </div>
       <div>
         <h2>Numbers</h2>
-        <DisplayPersons persons={personstoShow} />
+        <DisplayPersons persons={persons} filter={newFilter} />
       </div>
     </div>
   );
