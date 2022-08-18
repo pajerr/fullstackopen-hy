@@ -62,6 +62,14 @@ const DisplayPersons = ({ persons, filter }) => {
   }
 };
 
+const Filter = ({ newFilter, handleFilterChange }) => {
+  return (
+    <div>
+      <input value={newFilter} onChange={handleFilterChange} />
+    </div>
+  );
+};
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456", id: 1 },
@@ -123,13 +131,9 @@ const App = () => {
         addPerson={addPerson}
       />
       <h2>Filter</h2>
-      <div>
-        <input value={newFilter} onChange={handleFilterChange} />
-      </div>
-      <div>
-        <h2>Numbers</h2>
-        <DisplayPersons persons={persons} filter={newFilter} />
-      </div>
+      <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
+      <h2>Numbers</h2>
+      <DisplayPersons persons={persons} filter={newFilter} />
     </div>
   );
 };
