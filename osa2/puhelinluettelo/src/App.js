@@ -7,6 +7,30 @@ function alreadyInPersons(persons, first, last) {
   );
 }
 
+const NewEntry = ({
+  newName,
+  newNumber,
+  handleNameChange,
+  handleNumberChange,
+  addPerson,
+}) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+        name:
+        <input value={newName} onChange={handleNameChange} />
+      </div>
+      <div>
+        number:
+        <input value={newNumber} onChange={handleNumberChange} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  );
+};
+
 const DisplayPersons = ({ persons, filter }) => {
   if (filter.length === 0) {
     return (
@@ -68,9 +92,6 @@ const App = () => {
     }
   };
 
-  //tapahumankäsittelijämetodi saa parametrina tapahtumaolion event
-  //tapahtumaolion target viittaa inputin syötekentään
-  //value viittaa inputin syötekentän arvoon
   const handleNameChange = (event) => {
     console.log(event.target.value);
     setNewName(event.target.value);
@@ -92,21 +113,15 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
       <h2>Add new entry</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name:
-          <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number:
-          <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <NewEntry
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        addPerson={addPerson}
+      />
       <h2>Filter</h2>
       <div>
         <input value={newFilter} onChange={handleFilterChange} />
