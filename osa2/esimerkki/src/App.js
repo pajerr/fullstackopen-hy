@@ -34,6 +34,13 @@ const App = (props) => {
   };
 
   //The items of the list depend on the state of the component
+
+  /*
+  The displayed notes (all versus important) are controlled with a button. 
+  The event handler for the button is so simple that it has been defined directly
+   in the attribute of the button element. 
+   The event handler switches the value of showAll from true to false and vice versa:
+  */
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);
@@ -41,6 +48,11 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? "important" : "all"}
+        </button>
+      </div>
       <ul>
         {notes.map((note) => (
           <Note key={note.id} note={note} />
