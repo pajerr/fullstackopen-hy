@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import personService from "./services/Persons";
 
 function alreadyInPersons(persons, first, last) {
   //return first element of array that matches first and last, otherwise return false
@@ -78,8 +79,8 @@ const App = () => {
   const [newFilter, setFilter] = useState("");
 
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
+    //console.log("effect");
+    //axios.get("http://localhost:3001/persons").then((response) => {
       console.log("promise fulfilled");
       setPersons(response.data);
     });
