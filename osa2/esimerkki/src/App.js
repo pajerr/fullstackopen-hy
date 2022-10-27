@@ -1,28 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Note from "./components/Note";
+import noteService from "./services/notes";
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
+const App = () => {
+  const [notes, setNotes] = useState([]);
   //Lisätään komponentille App tila newNote lomakkeen syötettä varten ja määritellään se input-komponentin attribuutin value arvoksi:
   const [newNote, setNewNote] = useState("");
   //state that keeps track of of notes to display
   const [showAll, setShowAll] = useState(true);
 
+  useEffect(() => {
+    console.log("effect");
+    //promise from service function
+    noteService.getAll().then((response) => {
+      //.then specifes event handler
+      console.log("promise fulfilled");
+      setNotes(response.data);
+    });
+  }, []);
+  //[] fetches only once when the component is rendered for the first time
+
   //Tapahtumankäsittelijä kutsuu heti tapahtuman metodia event.preventDefault() jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan, joka aiheuttaisi mm. sivun uudelleenlatautumisen.
   const addNote = (event) => {
     event.preventDefault();
-    console.log("button clicked", event.target);
-
     const noteObject = {
       //sisältökentän arvo saadaan komponentin tilasta newNote
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() > 0.5,
-      id: notes.length + 1,
     };
 
-    setNotes(notes.concat(noteObject));
-    setNewNote("");
+    noteService.create(noteObject).then((response) => {
+      setNotes(notes.concat(response.data));
+      setNewNote("");
+    });
   };
 
   //Jotta kontrolloidun syötekomponentin editoiminen olisi mahdollista, täytyy sille rekisteröidä tapahtumankäsittelijä, joka synkronoi syötekenttään tehdyt muutokset komponentin App tilaan:
@@ -45,6 +57,25 @@ const App = (props) => {
     ? notes
     : notes.filter((note) => note.important === true);
 
+  const toggleImportanceOf = (id) => {
+    const url = `http://localhost:3031/notes/${id}`;
+    const note = notes.find((n) => n.id === id);
+    const changedNote = { ...note, important: !note.important };
+    /*
+The callback function sets the component's notes state to a new array that contains all 
+the items from the previous notes array, except for the old note which is replaced 
+by the updated version of it returned by the server:
+*/
+    axios.put(url, changedNote).then((response) => {
+      /*
+ if note.id !== id is true; we simply copy the item from the old array into the new array. 
+ If the condition is false, then the note object returned by the server is added to the 
+ array instead.
+*/
+      setNotes(notes.map((n) => (n.id !== id ? n : response.data)));
+    });
+  };
+
   return (
     <div>
       <h1>Notes</h1>
@@ -55,7 +86,11 @@ const App = (props) => {
       </div>
       <ul>
         {notes.map((note) => (
-          <Note key={note.id} note={note} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
         ))}
       </ul>
       <form onSubmit={addNote}>
