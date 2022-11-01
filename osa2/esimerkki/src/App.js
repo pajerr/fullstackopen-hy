@@ -36,7 +36,8 @@ const App = () => {
 
   //Jotta kontrolloidun syötekomponentin editoiminen olisi mahdollista, täytyy sille rekisteröidä tapahtumankäsittelijä, joka synkronoi syötekenttään tehdyt muutokset komponentin App tilaan:
 
-  //Tapahtumaolion kenttä target vastaa nyt kontrolloitua input-kenttää ja event.target.value viittaa inputin syötekentän arvoon.
+  //Tapahtumaolion kenttä target vastaa nyt kontrolloitua input-kenttää ja event.target.value viittaa
+  //inputin syötekentän arvoon.
   const handleNoteChange = (event) => {
     console.log(event.target.value);
     setNewNote(event.target.value);
@@ -62,9 +63,20 @@ The callback function sets the component's notes state to a new array that conta
 the items from the previous notes array, except for the old note which is replaced 
 by the updated version of it returned by the server:
 */
-    noteService.update(id, changedNote).then((returnedNote) => {
-      setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
-    });
+    noteService
+      .update(id, changedNote)
+      .then((returnedNote) => {
+        setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
+      })
+      .catch((error) => {
+        alert(`the note '${note.content}' was already deleted from server`);
+        /*
+Removing an already deleted note from the application's state is done with the array filter method, 
+which returns a new array comprising only of the items from the list for which the function
+ that was passed as a parameter returns true for:
+*/
+        setNotes(notes.filter((n) => n.id !== id));
+      });
   };
   /*
  if note.id !== id is true; we simply copy the item from the old array into the new array. 
