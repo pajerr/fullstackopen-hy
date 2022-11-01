@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import personService from "./services/persons.js";
+
 function alreadyInPersons(persons, first, last) {
   //return first element of array that matches first and last, otherwise return false
   return persons.find(
@@ -78,10 +80,8 @@ const App = () => {
   const [newFilter, setFilter] = useState("");
 
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -98,6 +98,12 @@ const App = () => {
     if (alreadyInPersons(persons, first, last)) {
       alert(`${first} ${last} is already added to phonebook`);
     } else {
+      personService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
+      /*
       axios
         .post("http://localhost:3001/persons", personObject)
         .then((response) => {
@@ -105,10 +111,7 @@ const App = () => {
           setNewName("");
           setNewNumber("");
         });
-
-      // setPersons(persons.concat(personObject));
-      // setNewName("");
-      // setNewNumber("");
+        */
     }
   };
 
