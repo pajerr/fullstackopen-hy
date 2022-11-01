@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import personService from "./services/persons.js";
 
@@ -103,15 +102,6 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       });
-      /*
-      axios
-        .post("http://localhost:3001/persons", personObject)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName("");
-          setNewNumber("");
-        });
-        */
     }
   };
 
