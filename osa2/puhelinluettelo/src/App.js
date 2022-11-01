@@ -33,7 +33,8 @@ const NewEntry = ({
   );
 };
 
-const DisplayPersons = ({ persons, filter }) => {
+const DisplayPersons = ({ persons, filter, handlePersonDelete }) => {
+  //display all persons if filter is empty, otherwise filter persons
   if (filter.length === 0) {
     return (
       <div>
@@ -41,6 +42,9 @@ const DisplayPersons = ({ persons, filter }) => {
           {persons.map((person) => (
             <li key={person.id}>
               {person.name} {person.number}
+              <button onClick={() => handlePersonDelete(person.id)}>
+                Delete person
+              </button>
             </li>
           ))}
         </ul>
@@ -120,8 +124,13 @@ const App = () => {
     setFilter(event.target.value);
   };
 
+  const handlePersonDelete = (id) => {
+    console.log(`delete person with id ${id}`);
+    personService.remove(id);
+  };
+
   /*const personstoShow = showAll
-    ? persons
+    ? person
     : persons.filter((person) => person.includes(filter));*/
 
   return (
@@ -138,7 +147,11 @@ const App = () => {
       <h2>Filter</h2>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>Numbers</h2>
-      <DisplayPersons persons={persons} filter={newFilter} />
+      <DisplayPersons
+        persons={persons}
+        filter={newFilter}
+        handlePersonDelete={handlePersonDelete}
+      />
     </div>
   );
 };
