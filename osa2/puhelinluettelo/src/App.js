@@ -127,6 +127,8 @@ const App = () => {
   const handlePersonDelete = (id) => {
     console.log(`delete person with id ${id}`);
     personService.remove(id);
+    //need to update persons state and remove person with id that was deleted
+    setPersons(persons.filter((person) => person.id !== id));
   };
 
   /*const personstoShow = showAll
