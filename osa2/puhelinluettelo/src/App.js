@@ -108,16 +108,26 @@ const App = () => {
       let result = window.confirm(
         `${first} ${last} is already added to phonebook, replace the old number with a new one?`
       );
+      //if confirm yes to update number
       if (result === true) {
         //update number
-        //i need to find the id of the person to update, but problem is we are getting first and last instead
-        /*
-        personService.update(personObject, updatedNumber).then((d) => {
-          setPersons(
-            persons.map((person) => (person.id !== id ? person : updatedPerson))
-          );
-        });
-        */
+        //person.id is from person returned from function
+        //personObject is from form data that has new number
+        personService
+          .update(person.id, personObject.number)
+          //updatedNumber is response from server
+          .then((resUpdatedNumber) => {
+            //create new personObject with updated number and use existing id
+            const updatedPerson = {
+              ...person,
+              number: resUpdatedNumber.number,
+            };
+            setPersons(
+              persons.map((personObject) =>
+                personObject.id !== person.id ? personObject : updatedPerson
+              )
+            );
+          });
         console.log("updated number...");
       } else {
         //do nothing
