@@ -101,13 +101,23 @@ const App = () => {
 
     let [first, last] = personObject.name.split(" ");
 
-    if (alreadyInPersons(persons, first, last)) {
+    // extract person from functions return value
+    const person = alreadyInPersons(persons, first, last);
+    // if person exists and returned from function
+    if (person) {
       let result = window.confirm(
         `${first} ${last} is already added to phonebook, replace the old number with a new one?`
       );
-
       if (result === true) {
         //update number
+        //i need to find the id of the person to update, but problem is we are getting first and last instead
+        /*
+        personService.update(personObject, updatedNumber).then((d) => {
+          setPersons(
+            persons.map((person) => (person.id !== id ? person : updatedPerson))
+          );
+        });
+        */
         console.log("updated number...");
       } else {
         //do nothing
