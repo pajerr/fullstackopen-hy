@@ -60,6 +60,9 @@ const DisplayPersons = ({ persons, filter, handlePersonDelete }) => {
           {filteredPersons.map((person) => (
             <li key={person.id}>
               {person.name} {person.number}
+              <button onClick={() => handlePersonDelete(person.id)}>
+                Delete person
+              </button>
             </li>
           ))}
         </ul>
@@ -99,7 +102,18 @@ const App = () => {
     let [first, last] = personObject.name.split(" ");
 
     if (alreadyInPersons(persons, first, last)) {
-      alert(`${first} ${last} is already added to phonebook`);
+      let result = window.confirm(
+        `${first} ${last} is already added to phonebook, replace the old number with a new one?`
+      );
+
+      if (result === true) {
+        //update number
+        console.log("updated number...");
+      } else {
+        //do nothing
+        console.log("dont update...");
+      }
+      //alert(`${first} ${last} is already added to phonebook`);
     } else {
       personService.create(personObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
