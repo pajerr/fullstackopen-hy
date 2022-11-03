@@ -97,36 +97,41 @@ const App = () => {
 
     //now this add new person and update existing person
     const addPerson = (event) => {
+        //broken
         event.preventDefault()
-        const personObject = {
-            name: newName,
-            number: newNumber,
-            id: persons.length + 1
-        }
-
-        let [first, last] = personObject.name.split(' ')
-
+        //check if person already exists
+        let [first, last] = newName.split(' ')
         // extract person from functions return value
         const existingPerson = alreadyInPersons(persons, first, last)
+
         // if person exists and returned from function
         if (existingPerson) {
             console.log('entered if existingPerson')
             let result = window.confirm(
                 `${first} ${last} is already added to phonebook, replace the old number with a new one?`
             )
+
             //if confirm yes to update number
             if (result === true) {
+                //create new person object with updated number
+                const personObject = {
+                    name: existingPerson.name,
+                    number: newNumber,
+                    id: existingPerson.id
+                }
+
                 //update number
                 //person.id is from person returned from function
                 //personObject is from form data that has new number
                 personService
-                    .update(existingPerson.id, personObject.number)
+                    //.update(existingPerson.id, personObject.number)
+                    .update(personObject)
                     //updatedNumber is response from server
-                    .then((resUpdatedNumber) => {
+                    .then((resUpdatedPersonObject) => {
                         //create new personObject with updated number and use existing id
                         const updatedPerson = {
                             ...existingPerson,
-                            number: resUpdatedNumber
+                            number: resUpdatedPersonObject.number
                         }
                         console.log('updatedPerson debug: ', updatedPerson)
                         setPersons(
@@ -143,8 +148,14 @@ const App = () => {
                 console.log('dont update...')
             }
             //alert(`${first} ${last} is already added to phonebook`);
-        } else {
-            console.log('in before error??')
+        }
+        //create new person object
+        else {
+            const personObject = {
+                name: newName,
+                number: newNumber,
+                id: persons.length + 1
+            }
             personService.create(personObject).then((returnedPerson) => {
                 setPersons(persons.concat(returnedPerson))
                 setNewName('')

@@ -11,11 +11,21 @@ const create = (newObject) => {
     return request.then((response) => response.data)
 }
 
-const update = (id, updatedNumber) => {
-    const request = axios.put(`${baseUrl}/${id}`, { number: updatedNumber })
+const update = (updatedPerson) => {
+    const request = axios.put(`${baseUrl}/${updatedPerson.id}`, {
+        name: updatedPerson.name,
+        number: updatedPerson.number,
+        id: updatedPerson.id
+    })
     //return only the updated number, ID stays the same
-    return request.then((response) => response.data.number)
+    return request.then((response) => response.data)
 }
+
+// const update = (id, updatedNumber) => {
+//     const request = axios.put(`${baseUrl}/${id}`, { number: updatedNumber })
+//     //return only the updated number, ID stays the same
+//     return request.then((response) => response.data.number)
+// }
 
 const remove = (id) => {
     const request = axios.delete(`${baseUrl}/${id}`)
