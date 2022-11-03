@@ -141,6 +141,8 @@ const App = () => {
                                     : updatedPerson
                             )
                         )
+                        setNewName('')
+                        setNewNumber('')
                     })
                 console.log('updated number...')
             } else {
