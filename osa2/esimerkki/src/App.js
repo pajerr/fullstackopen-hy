@@ -2,6 +2,15 @@ import { useState, useEffect } from "react";
 
 import Note from "./components/Note";
 import noteService from "./services/notes";
+import "./index.css";
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return <div className="error">{message}</div>;
+};
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -9,6 +18,7 @@ const App = () => {
   const [newNote, setNewNote] = useState("");
   //state that keeps track of of notes to display
   const [showAll, setShowAll] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("some error happened...");
 
   useEffect(() => {
     //noteService returns response.data from the promise returned by axios.get
@@ -87,6 +97,7 @@ which returns a new array comprising only of the items from the list for which t
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
