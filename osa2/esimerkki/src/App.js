@@ -18,7 +18,7 @@ const App = () => {
   const [newNote, setNewNote] = useState("");
   //state that keeps track of of notes to display
   const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("some error happened...");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     //noteService returns response.data from the promise returned by axios.get
@@ -79,15 +79,21 @@ by the updated version of it returned by the server:
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
       })
       .catch((error) => {
-        alert(`the note '${note.content}' was already deleted from server`);
+        setErrorMessage(
+          `Note '${note.content}' was already removed from server`
+        );
         /*
 Removing an already deleted note from the application's state is done with the array filter method, 
 which returns a new array comprising only of the items from the list for which the function
  that was passed as a parameter returns true for:
 */
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
         setNotes(notes.filter((n) => n.id !== id));
       });
   };
+
   /*
  if note.id !== id is true; we simply copy the item from the old array into the new array. 
  If the condition is false, then the note object returned by the server is added to the 
