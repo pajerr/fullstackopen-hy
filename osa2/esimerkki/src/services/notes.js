@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3031/notes";
+const baseUrl = "http://localhost:3001/api/notes";
 /*
 We no longer return the promise returned by axios directly. Instead, we assign 
 the promise to the request variable and call its then method:
