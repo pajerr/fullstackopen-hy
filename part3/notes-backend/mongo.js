@@ -1,34 +1,34 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 //get password from cli arguments
 const password = process.argv[2]
 
 if (process.argv.length < 3) {
-    console.log(
-        'Please provide the password as an argument: node mongo.js <password>'
-    )
-    process.exit(1)
+  console.log(
+    'Please provide the password as an argument: node mongo.js <password>'
+  )
+  process.exit(1)
 }
 
-const url = `mongodb+srv://fullstack:${password}@cluster0.isxty0d.mongodb.net/noteApp?retryWrites=true&w=majority`
-
+const url = process.env.MONGO_URI
 //The schema tells Mongoose how the note objects are to be stored in the database.
 const noteSchema = new mongoose.Schema({
-    content: String,
-    date: Date,
-    important: Boolean
+  content: String,
+  date: Date,
+  important: Boolean
 })
 
 //Mongoose automatically name collections as the plural (e.g. notes)
 const Note = mongoose.model('Note', noteSchema)
 
 mongoose.connect(url).then((result) => {
-    console.log('connected')
-    Note.find({}).then((result) => {
-        result.forEach((note) => {
-            console.log(note)
-        })
-        mongoose.connection.close()
+  console.log('connected')
+  Note.find({}).then((result) => {
+    result.forEach((note) => {
+      console.log(note)
     })
+    mongoose.connection.close()
+  })
 })
 /*
 Create new note object with help of Note model.
