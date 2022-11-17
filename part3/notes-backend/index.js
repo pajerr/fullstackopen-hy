@@ -1,38 +1,14 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
-
-//Note variable will be assigned to the same object that the module defines.
-const Note = require('./models/note')
-var morgan = require('morgan')
-
-const middleware = morgan('tiny')
-
 const cors = require('cors')
+require('dotenv').config()
+//Note variable will be assigned to the same object that the module defines.
+
+const Note = require('./models/note')
+
 app.use(cors())
-
 app.use(express.static('build'))
-
-let notes = [
-  {
-    id: 1,
-    content: 'HTML is easy',
-    date: '2022-01-10T17:30:31.098Z',
-    important: true
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only Javascript',
-    date: '2022-01-10T18:39:34.091Z',
-    important: false
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    date: '2022-01-10T19:20:14.298Z',
-    important: true
-  }
-]
+app.use(express.json())
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -41,33 +17,9 @@ const requestLogger = (request, response, next) => {
   console.log('---')
   next()
 }
-/*
-const mongoose = require('mongoose')
-const url = process.env.MONGO_URI
-
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean
-})
-
-noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-//const Note = mongoose.model('Note', noteSchema)
-*/
-app.use(express.json())
 
 app.use(requestLogger)
-
-app.use(middleware)
+//app.use(middleware)
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -78,7 +30,7 @@ const generateId = () => {
   return maxId + 1
 }
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -92,9 +44,12 @@ app.post('/api/notes', (request, response) => {
   })
   //The response is sent inside of the callback function for the save operation.
   //This ensures that the response is sent only if the operation succeeded.
-  note.save().then((savedNote) => {
-    response.json(savedNote)
-  })
+  note
+    .save()
+    .then((savedNote) => {
+      response.json(savedNote)
+    })
+    .catch((error) => next(error))
 })
 
 app.get('/api/notes', (request, response) => {
@@ -103,29 +58,74 @@ app.get('/api/notes', (request, response) => {
   })
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter((note) => note.id !== id)
-
-  response.status(204).end()
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end()
+    })
+    .catch((error) => next(error))
 })
 
-app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = notes.find((note) => note.id === id)
+app.get('/api/notes/:id', (request, response, next) => {
+  Note.findById(request.params.id)
+    .then((note) => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+    /*If the format of the id is incorrect, then we will end up in the error handler defined in 
+the catch block. The appropriate status code for the situation is 400 Bad Request*/
+    //If the next function is called with a parameter, then the execution will continue to the error handler middleware.
+    .catch((error) => next(error))
+  /*
+    .catch((error) => {
+      console.log(error)
+      response.status(400).send({ error: 'malformatted id' })
+    })
+    */
+})
+/*
+There is one important detail regarding the use of the findByIdAndUpdate method. By default,
+ the updatedNote parameter of the event handler receives the original document without the modifications. 
+ We added the optional { new: true }parameter, which will cause our event handler to be
+  called with the new modified document instead of the original.
+*/
+app.put('/api/notes/:id', (request, response, next) => {
+  const { content, important } = request.body
 
-  if (note) {
-    response.json(note)
-  } else {
-    response.status(404).end()
-  }
+  Note.findByIdAndUpdate(
+    request.params.id,
+    { content, important },
+    { new: true, runValidators: true, context: 'query' }
+  )
+    .then((updatedNote) => {
+      response.json(updatedNote)
+    })
+    .catch((error) => next(error))
 })
 
+//Unknown endpoint middleware must be the 2nd last loaded middleware, before the error handler.
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
