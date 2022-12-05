@@ -50,6 +50,7 @@ test('a specific note is within the returned notes', async () => {
   expect(contents).toContain('Browser can execute only Javascript')
 })
 
+//adds a new note and
 test('a valid note can be added', async () => {
   const newNote = {
     content: 'async/await simplifies making async calls',
@@ -61,19 +62,12 @@ test('a valid note can be added', async () => {
     .send(newNote)
     .expect(201)
     .expect('Content-Type', /application\/json/)
-
+  // verify that amount of notes in db has increased by one
   const notesAtEnd = await helper.notesInDb()
   expect(notesAtEnd).toHaveLength(helper.initialNotes.length + 1)
+  // verify that the contents of the new note is found from array of note contents
   const contents = notesAtEnd.map((n) => n.content)
   expect(contents).toContain('async/await simplifies making async calls')
-  /*
-  const response = await api.get('/api/notes')
-
-  const contents = response.body.map((r) => r.content)
-
-  expect(response.body).toHaveLength(initialNotes.length + 1)
-  expect(contents).toContain('async/await simplifies making async calls')
-  */
 })
 
 test('note without content is not added', async () => {
