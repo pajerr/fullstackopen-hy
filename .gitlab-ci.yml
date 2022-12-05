@@ -29,7 +29,8 @@ nodejs_tests:
   image: node:latest
   script:
     - cd part4/notes-backend
-    #- export TEST_MONGODB_URI=mongodb://localhost:27017/test
+    - export TEST_MONGODB_URI=$TEST_MONGODB_URI
+    - echo "TEST_MONGODB_URI: $TEST_MONGODB_URI"
     - npm install
     - npm run test
   artifacts:
