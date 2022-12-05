@@ -24,13 +24,13 @@ stages:
 
 nodejs_tests:
   stage: test
-  services:
-    - mongodb
+  variables:
+    TEST_MONGODB_URI: $TEST_MONGODB_URI
+ #   - mongodb
   image: node:latest
   script:
     - cd part4/notes-backend
     #- export TEST_MONGODB_URI=mongodb://localhost:27017/test
-    - export TEST_MONGODB_URI=mongodb://mongodb
     - npm install
     - npm run test
   artifacts:
