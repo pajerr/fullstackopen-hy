@@ -3,6 +3,7 @@ stages:
 
 setup_mongodb:
   stage: test
+  image: docker:latest
   services:
     - docker:dind
   script:
@@ -19,6 +20,7 @@ setup_mongodb:
 
 nodejs_tests:
   stage: test
+  image: nodejs
   script:
     - cd part4/notes-backend
     - export TEST_MONGODB_URI=mongodb://localhost:27017/test
