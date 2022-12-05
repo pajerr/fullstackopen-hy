@@ -30,7 +30,7 @@ nodejs_tests:
   script:
     - cd part4/notes-backend
     - export TEST_MONGODB_URI=$TEST_MONGODB_URI
-    - echo "TEST_MONGODB_URI: $TEST_MONGODB_URI"
+    - echo "$TEST_MONGODB_URI"
     - npm install
     - npm run test
   artifacts:
