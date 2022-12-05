@@ -24,16 +24,18 @@ stages:
   #   paths:
   #     - integration-test-results.xml
 
-nodejs_tests:
+part4_nodejs_tests:
   stage: test
   image: node:latest
   script:
     - cd part4/notes-backend
     - export MONGODB_URI=$TEST_MONGODB_URI
-    - echo "$MONGODB_URI"
     - npm install
-   # - npm start
     - npm run test
-  artifacts:
-    paths:
-      - test-results.xml
+  only:
+    changes:
+      - "part4/**"    
+      - ".gitlab-ci.yml"
+  # artifacts:
+  #   paths:
+  #     - test-results.xml
