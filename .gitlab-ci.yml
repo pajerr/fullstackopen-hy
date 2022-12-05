@@ -31,8 +31,8 @@ nodejs_tests:
     - cd part4/notes-backend
     - export MONGODB_URI=$TEST_MONGODB_URI
     - echo "$MONGODB_URI"
-    - npm start
     - npm install
+    - npm start
     - npm run test
   artifacts:
     paths:
