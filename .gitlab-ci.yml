@@ -5,16 +5,16 @@ variables:
 stages:
   - test
 
-setup_mongodb:
-  stage: test
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - docker pull mongo:latest
-    - docker run -d -p 27017:27017 --name mongodb mongo:latest
-    - sleep 5 # give the database some time to start
-    - cd part4/notes-backend
+# setup_mongodb:
+#   stage: test
+#   image: docker:latest
+#   services:
+#     - docker:dind
+#   script:
+#     - docker pull mongo:latest
+#     - docker run -d -p 27017:27017 --name mongodb mongo:latest
+#     - sleep 5 # give the database some time to start
+#     - cd part4/notes-backend
   #   - export TEST_MONGODB_URI=mongodb://localhost:27017/test
   #   - npm install
   #   - npm run integration-tests
@@ -24,10 +24,13 @@ setup_mongodb:
 
 nodejs_tests:
   stage: test
+  services:
+    - mongodb
   image: node:latest
   script:
     - cd part4/notes-backend
-    - export TEST_MONGODB_URI=mongodb://localhost:27017/test
+    #- export TEST_MONGODB_URI=mongodb://localhost:27017/test
+    - export TEST_MONGODB_URI=mongodb://mongodb
     - npm install
     - npm run test
   artifacts:
