@@ -38,10 +38,11 @@ test('the first note is about HTTP methods', async () => {
 test('all notes are returned', async () => {
   const notesAtEnd = await helper.notesInDb()
   expect(notesAtEnd).toHaveLength(helper.initialNotes.length)
-  // const response = await api.get('/api/notes')
-  // expect(response.body).toHaveLength(initialNotes.length)
 })
 
+// The response.body.map(r => r.content)command is used to create an array containing
+// the content of every note returned by the API. The toContain method is used for
+// checking that the note given to it as a parameter is in the list of notes returned by the API.
 test('a specific note is within the returned notes', async () => {
   const response = await api.get('/api/notes')
 
