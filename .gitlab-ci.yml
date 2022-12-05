@@ -1,0 +1,29 @@
+stages:
+  - test
+
+setup_mongodb:
+  stage: test
+  services:
+    - docker:dind
+  script:
+    - docker pull mongo:latest
+    - docker run -d -p 27017:27017 --name mongodb mongo:latest
+    - sleep 5 # give the database some time to start
+    - cd part4/notes-backend
+  #   - export TEST_MONGODB_URI=mongodb://localhost:27017/test
+  #   - npm install
+  #   - npm run integration-tests
+  # artifacts:
+  #   paths:
+  #     - integration-test-results.xml
+
+nodejs_tests:
+  stage: test
+  script:
+    - cd part4/notes-backend
+    - export TEST_MONGODB_URI=mongodb://localhost:27017/test
+    - npm install
+    - npm run test
+  artifacts:
+    paths:
+      - test-results.xml
