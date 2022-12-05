@@ -32,7 +32,7 @@ nodejs_tests:
     - export MONGODB_URI=$TEST_MONGODB_URI
     - echo "$MONGODB_URI"
     - npm install
-    - npm start
+   # - npm start
     - npm run test
   artifacts:
     paths:
